@@ -1,3 +1,10 @@
+(*
+  Run this snippet by printing in the toplevel
+  #use "main.ml";;
+*)
+#use "topfind";;
+#require "lazy-trie";;
+
 open Printf
 
 module Mem : sig

@@ -1,0 +1,28 @@
+opam-version: "2.0"
+
+name: "asdf"
+synopsis: "asdf"
+description: """
+bsdf
+"""
+version: "0.1"
+
+maintainer: "kakadu.hafanana@gmail.com"
+authors: ["https://github.com/Kakadu"]
+homepage: "https://github.com/kakadu/asdf"
+bug-reports: "https://github.com/kakadu/asdf"
+depends: [
+  "ocaml"
+  "ocamlfind"  {build}
+  "lazy-trie"
+]
+build: [
+  [make]
+  [make "test"] {with-test}
+]
+#install: [make "PREFIX=%{prefix}%" "install"]
+#remove: [make "PREFIX=%{prefix}%" "uninstall"]
+#dev-repo: "git+https://github.com/dboulytchev/GT.git"
+#url {
+#  src: "git+https://github.com/Kakadu/GT.git"
+#}
