@@ -1,16 +1,37 @@
 open Printf
 
-module Mem (*: sig
-  val apply : ('a -> 'b) -> 'a -> 'b
-end *) = struct
-  type ('r) t =
+module Mem : sig
+  type 'r t =
+    | Z : 'r -> 'r t
+    | S : ('a -> 'r) t * 'a -> 'r t
+  val apply : ('a -> 'b) t -> 'a -> 'b t
+  val extract : 'a t -> 'a
+end  = struct
+  type 'r t =
     | Z : 'r -> 'r t
     | S : ('a -> 'r) t * 'a -> 'r t
 
   let make x = Z x
   let apply repr arg = S (repr, arg)
   let (//) = apply
+
+  let hmap : (Obj.t, Obj.t) Lazy_trie.t = Lazy_trie.empty
+
+
+  let extract : type a . a t -> a = fun root ->
+    let rec helper : type a . Obj.t list -> a t -> a = fun path r ->
+      match r with
+      | Z f -> f
+      | S (f, x) -> helper path f x
+    in
+    helper [] root
+
 end
+
+
+let foo = Mem.(S (Z List.fold_left, (fun x _ -> x)))
+let foo2 = Mem.extract foo
+let foo3 = Mem.extract foo 1 ["asdf"]
 
 (*
 external inspect : 'a -> 'a = "inspect_block" ;;
@@ -33,5 +54,3 @@ let () =
   (* ignore @@ inspect g; *)
   ()
 *)
-
-let foo = Mem.(S (Z List.fold_left, (fun x _ -> x))) ;;
