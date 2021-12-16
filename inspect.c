@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <caml/mlvalues.h>
 
-void margin (int n)
-  { while (n-- > 0) printf(".");  return; }
+void margin (int n) {
+  while (n-- > 0) printf(".");
+}
 
 void print_block (value v,int m)
 {
@@ -14,13 +15,17 @@ void print_block (value v,int m)
   };
   printf ("memory block: size=%d  -  ", size=Wosize_val(v));
   switch (Tag_val(v)) {
-    case Closure_tag :
+    case Closure_tag:
         printf("closure with %d free variables\n", size-1);
-        margin(m+4); printf("code pointer: %p\n",Code_val(v)) ;
-        for (i=1;i<size;i++)
-          print_block(Field(v,i), m+4);
+        // -1 because first is code pointer ?
+        margin(m+4); printf("code pointer: %p\n", Code_val(v) );
+        int arity = Int_val(  Field(v,1) );
+        margin(m+4); printf("arity = %d\n", arity);
+        int offset = (arity == 1) ? 0 : 1;
+        for (i=2; i<size-offset; i++)
+          print_block( Field(v,i+offset), m+4);
         break;
-    case String_tag :
+    case String_tag:
         printf("string: %s (%s)\n", String_val(v),(char *) v);
         break;
     case Double_tag:
