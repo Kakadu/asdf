@@ -39,6 +39,10 @@ ocamlfind opt -g  -S inspect.o myinspect.ml -o myinspect.exe
 ........memory block: size=3  -  closure with 2 free variables
 ............code pointer: 0x55c3d5311a70
 ............arity = 3
+
+
+
+
 ✗ export OPAMSWITCH=4.12.1+flambda && eval $(opam env) && make && ./myinspect.exe
 cc -I `ocamlc -where`/  -c inspect.c
 #ocamlfind opt -g  -package lazy-trie inspect.o main.ml -o main.exe
